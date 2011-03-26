@@ -1,0 +1,139 @@
+<html lang="en">
+<meta charset="utf-8">
+
+	<head>
+		<title>HTML5 Canvas. Anti-Aliased Letters</title>
+
+		<style type="text/css">
+			body {
+				text-align:center;
+				background-color: #fff;
+				margin: 0px;
+				overflow: hidden;
+				color:#fff;
+			}
+			
+			#credit {position:absolute; top:0px; right:10px; z-index:9999; color:#000; text-align:right;}
+		</style>
+		<script src="js/letters.js"></script>
+		
+	</head>
+	<body onload="init();">
+		
+		<div id="credit">
+			<p>
+				<a href="http://www.byrichardpowell.co.uk" title="By Richard Powell With help from @Seb_ly">By Richard Powell</a>.<br /> 
+				<a href="http://twitter.com/byrichardpowell">Follow me on twitter</a><br/> or the <a href="http://twitter.com/search/creativejs">#creativejs</a> hastag</p>
+			
+		</div>
+		
+		<script>
+		
+		// screen size variables
+			var SCREEN_WIDTH = window.innerWidth,
+				SCREEN_HEIGHT = window.innerHeight,
+				HALF_WIDTH = window.innerWidth / 2,
+				HALF_HEIGHT = window.innerHeight / 2,
+		
+		// canvas element and 2D context
+				canvas = document.createElement( 'canvas' ),
+				context = canvas.getContext( '2d' ),
+				
+		// The letters
+				letterRules = [		['c', SCREEN_WIDTH / 3.4, SCREEN_HEIGHT / 3.75],
+									['r', SCREEN_WIDTH / 2.75, SCREEN_HEIGHT / 3.75],
+									['e', SCREEN_WIDTH / 2.3, SCREEN_HEIGHT / 3.75],
+									['a', SCREEN_WIDTH / 2.02, SCREEN_HEIGHT / 3.75],
+									['t', SCREEN_WIDTH / 1.78, SCREEN_HEIGHT / 3.75],
+									['i', SCREEN_WIDTH / 1.64, SCREEN_HEIGHT / 3.75],
+									['v', SCREEN_WIDTH / 1.52, SCREEN_HEIGHT / 3.75],
+									['e', SCREEN_WIDTH / 1.365, SCREEN_HEIGHT / 3.75],
+									['j', SCREEN_WIDTH / 4.5, SCREEN_HEIGHT / 1.98],
+									['a', SCREEN_WIDTH / 3.5, SCREEN_HEIGHT / 1.98],
+									['v', SCREEN_WIDTH / 2.85, SCREEN_HEIGHT / 1.98],
+									['a', SCREEN_WIDTH / 2.42, SCREEN_HEIGHT / 1.98],
+									['s', SCREEN_WIDTH / 2.05, SCREEN_HEIGHT / 1.98],
+									['c', SCREEN_WIDTH / 1.81, SCREEN_HEIGHT / 1.98],
+									['r', SCREEN_WIDTH / 1.6, SCREEN_HEIGHT / 1.98],
+									['i', SCREEN_WIDTH / 1.475, SCREEN_HEIGHT / 1.98],
+									['p', SCREEN_WIDTH / 1.375, SCREEN_HEIGHT / 1.98],
+									['t', SCREEN_WIDTH / 1.26, SCREEN_HEIGHT / 1.98]
+				],
+				frame = 0,
+				letterStore = [];
+				clicked = false
+				
+		// Fire
+			function init() {				
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				container.appendChild(canvas); 
+				canvas.width = SCREEN_WIDTH; 
+				canvas.height = SCREEN_HEIGHT;
+				
+				
+				size = SCREEN_WIDTH/30;
+				
+				for (i = 0; i < letterRules.length; i ++) {					
+					letterStore[i] = new letters(letterRules[i][1], letterRules[i][2], size);
+					letterStore[i].color = randomRGBA();
+					
+				}
+		
+				setInterval(loop, 1000 / 26);		  		  			
+			}
+				
+			
+			function loop() {			
+				
+			//	context.clearRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);	
+			
+				context.fillStyle = "hsla("+350+", 100%, 100%, 0.2)"
+				context.fillRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+				
+				for (i = 0; i < letterStore.length; i ++) {	
+					
+					var letter = letterStore[i] 
+					
+					if (frame > 65) {
+					
+						letter.velX = randomRange(-3, 3);
+						letter.velY = randomRange(-3, 3);
+					
+					}					
+					
+					letter.update()
+					letter.render(context, letterRules[i][0])
+					
+				}
+				
+				frame++
+				
+		
+			}
+			
+
+			
+			
+			
+			// Generates random no between min + max
+			function randomRange(min, max) {
+				return ((Math.random()*(max-min)) + min); 
+			}
+			
+			
+			// Generate random RGBA value
+			function randomRGBA() {
+				
+				return "rgba("+Math.round(randomRange(0,255))+","+Math.round(randomRange(0,255))+","+Math.round(randomRange(0,255))+","+Math.round(randomRange(0,100))+")";
+			}
+			
+				
+		</script>
+		
+		
+	</body>
+	
+	
+</html>
